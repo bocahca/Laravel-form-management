@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->string('question_text');
+            $table->enum('type', ['text', 'textarea', 'dropdown', 'radio', 'checkbox']);
+            $table->integer('position')->default(0);
+            $table->foreignId('section_id')->constrained('sections')->onDelete('cascade');
             $table->timestamps();
         });
     }

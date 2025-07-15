@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->integer('position')->default(0);
+            $table->foreignId('form_id')->constrained('forms')->onDelete('cascade');
             $table->timestamps();
         });
     }
