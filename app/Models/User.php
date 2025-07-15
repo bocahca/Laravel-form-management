@@ -56,4 +56,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Submission::class);
     }
+    public function approvedSubmissions()
+    {
+        return $this->hasMany(Submission::class, 'approved_by'); // FK: approved_by (custom)
+    }
 }
