@@ -14,7 +14,9 @@ class FormController extends Controller
      */
     public function index()
     {
-        $forms = Form::where('user_id', Auth::id())->get();
+        $forms = Form::where('user_id', auth()->id())
+                 ->orderByDesc('created_at')
+                 ->paginate(10);
         return view('admin.forms.index', compact('forms'));
     }
 
