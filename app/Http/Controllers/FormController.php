@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFormRequest;
 use App\Models\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormController extends Controller
 {
@@ -12,7 +14,8 @@ class FormController extends Controller
      */
     public function index()
     {
-        //
+        $forms = Form::where('user_id', Auth::id())->get();
+        return view('admin.forms.index', compact('forms'));
     }
 
     /**
@@ -20,15 +23,20 @@ class FormController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.forms.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFormRequest $request)
     {
-        //
+        Auth::user()
+            ->forms()
+            ->create($request->validated());
+
+        return redirect()->route('admin.forms.index')
+            ->with('status', 'Form created successfully.');
     }
 
     /**
