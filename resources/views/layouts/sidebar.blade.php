@@ -1,9 +1,9 @@
 <nav class="mt-8 pt-4 px-4 space-y-2">
     @php $role = auth()->user()->role; @endphp
     {{-- Home --}}
-    <a href="{{ route('admin.dashboard') }}"
+    <a href="{{ route("$role.dashboard") }}"
         class="flex items-center space-x-3 px-3 py-2 rounded-md transition-colors
-            {{ request()->routeIs('admin.dashboard')
+            {{ request()->routeIs("$role.dashboard")
                 ? 'bg-primary text-white'
                 : 'text-gray-700 hover:bg-gray-100 hover:text-primary' }}">
         {{-- Icon Home --}}

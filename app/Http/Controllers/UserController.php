@@ -11,8 +11,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        $activeFormsCount = Form::where('is_active', true)->count();
-
         $recent = Submission::with('form')
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
@@ -29,7 +27,6 @@ class UserController extends Controller
         $approved = $statuses['approved'] ?? 0;
         $rejected = $statuses['rejected'] ?? 0;
         return view('user.dashboard', compact(
-            'activeFormsCount',
             'recent',
             'pending',
             'approved',
