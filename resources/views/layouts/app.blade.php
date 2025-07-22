@@ -38,7 +38,7 @@
 
         <!-- Sidebar -->
         <aside @mouseenter="openSidebar()" @mouseleave="closeSidebar()" :class="sidebarOpen ? 'w-64' : 'w-16'"
-            class="bg-white border-r transition-all duration-300">
+            class="bg-white border-r transition-all duration-300 sticky top-0 h-screen">
             @include('layouts.sidebar')
         </aside>
 
