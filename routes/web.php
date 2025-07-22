@@ -30,6 +30,8 @@ Route::middleware(['auth','role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminController::class,'index'])
             ->name('dashboard');
+        Route::patch('forms/{form}/toggle', [FormController::class, 'toggle'])
+              ->name('forms.toggle');
         Route::resource('forms', FormController::class);
     });
 
