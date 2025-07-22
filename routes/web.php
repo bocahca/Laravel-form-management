@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +25,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth','role:admin'])
-     ->get('/admin/dashboard', [AdminController::class,'index'])
-     ->name('admin.dashboard');
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminController::class,'index'])
+            ->name('dashboard');
+        Route::resource('forms', FormController::class);
+    });
 
 Route::middleware(['auth','role:user'])
      ->get('/user/dashboard', [UserController::class,'index'])
