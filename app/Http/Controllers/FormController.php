@@ -12,11 +12,21 @@ class FormController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $forms = Form::where('user_id', Auth::id())
-                 ->orderByDesc('created_at')
-                 ->paginate(10);
+        $q = $request->input('q');
+
+        $query = Form::where('user_id', Auth::id());
+
+        if ($q) {
+            $query->where('title', 'ILIKE', "%{$q}%");
+        }
+
+        $forms = $query
+            ->orderByDesc('created_at')
+            ->paginate(10)
+            ->appends(['q' => $q]);
+
         return view('admin.forms.index', compact('forms'));
     }
 
@@ -64,7 +74,22 @@ class FormController extends Controller
     {
         //
     }
+    public function toggle(Request $request, Form $form)
+    {
+        
+        if ($form->user_id !== Auth::id()) {
+            abort(403);
+        }
 
+        // Ambil nilai baru dari request (0 atau 1)
+        $newStatus = $request->input('is_active', 0);
+
+        // Update model
+        $form->update(['is_active' => (bool) $newStatus]);
+
+        // Redirect kembali dengan flash message
+        return back()->with('success', 'Status form berhasil diubah!');
+    }
     /**
      * Remove the specified resource from storage.
      */
