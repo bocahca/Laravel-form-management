@@ -1,11 +1,18 @@
 <nav class="mt-8 pt-4 px-4 space-y-2">
-    @php $role = auth()->user()->role; @endphp
+    @php
+        $role = auth()->user()->role;
+        $isActive = request()->routeIs("$role.dashboard");
+    @endphp
     {{-- Home --}}
-    <a href="{{ route("$role.dashboard") }}"
-        class="flex items-center space-x-3 px-3 py-2 rounded-md transition-colors
-            {{ request()->routeIs("$role.dashboard")
-                ? 'bg-primary text-white'
-                : 'text-gray-700 hover:bg-gray-100 hover:text-primary' }}">
+    <a href="{{ route("$role.dashboard") }}" class="flex items-center rounded-md transition-colors duration-200 w-full"
+        :class="sidebarOpen
+            ?
+            '{{ $isActive
+                ? 'bg-primary text-white px-3 py-2 justify-start'
+                : 'text-gray-700 hover:bg-gray-100 hover:text-primary px-3 py-2 justify-start' }}' :
+            '{{ $isActive
+                ? 'bg-primary text-white p-2 justify-center'
+                : 'text-gray-700 hover:bg-gray-100 p-2 justify-center' }}'">
         {{-- Icon Home --}}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="size-6 flex-shrink-0">
