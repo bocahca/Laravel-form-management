@@ -1,36 +1,62 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @php $role = auth()->user()->role; @endphp
+    @if ($role === 'admin')
+        <title>@yield('title', 'Dashboard Admin')</title>
+    @else
+        <title>@yield('title', 'Dashboard User')</title>
+    @endif
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    {{-- Masukkan CSS/JS via Vite --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+<body class="font-sans antialiased bg-gray-100">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    {{-- Root Alpine state --}}
+    <div x-data="{ sidebarOpen: true }" class="flex min-h-screen">
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
+        <!-- Sidebar -->
+        <aside :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-white border-r transition-all duration-300">
+            @include('layouts.sidebar')
+        </aside>
+
+        <!-- Main -->
+        <div class="flex-1 flex flex-col">
+
+            <!-- Topbar -->
+            <header class="bg-white shadow flex items-center justify-between px-6 py-4">
+                <div class="flex items-center space-x-4">
+                    {{-- Toggle btn --}}
+                    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded hover:bg-gray-100">
+                        <svg :class="sidebarOpen ? 'rotate-180' : ''"
+                            class="w-6 h-6 text-gray-600 transition-transform duration-300" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h2 class="text-xl font-semibold text-[#1F4E79]">
+                        @if ($role === 'admin')
+                            @yield('title', 'Dashboard Admin')
+                        @else
+                            @yield('title', 'Dashboard')
+                        @endif
+                    </h2>
+                </div>
+                @include('layouts.navigation') {{-- profile dropdown --}}
+            </header>
+
+            <!-- Page content -->
+            <main class="p-6 flex-1 overflow-auto">
+                @yield('content')
             </main>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

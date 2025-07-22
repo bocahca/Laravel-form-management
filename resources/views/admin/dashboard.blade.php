@@ -1,5 +1,5 @@
 {{-- filepath: d:\Tugas\KP\project\form-management\resources\views\admin\dashboard.blade.php --}}
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Dashboard Admin')
 
