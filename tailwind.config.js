@@ -11,14 +11,22 @@ export default {
 
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            colors: {
+                primary: {
+                    DEFAULT: '#1E40AF',
+                    light: '#3B82F6',
+                    dark: '#1E3A8A',
+                },
+                secondary: {
+                    DEFAULT: '#F59E0B',
+                    light: '#FBBF24',
+                    dark: '#B45309',
+                },
+                accent: '#10B981',
             },
-             colors: {
-                primary: '#1F4E79',
-                accent:  '#F4A01E',
-                sidebar: '#F4F6F8',
-                'gray-light': '#F4F6F8',
+            fontFamily: {
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                heading: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
 
         },
