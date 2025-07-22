@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreFormRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->role === 'admin';
     }
 
     /**
@@ -22,7 +23,9 @@ class StoreFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'is_active'   => ['required', 'boolean'],
         ];
     }
 }
