@@ -65,7 +65,7 @@
                         </div>
 
                         {{-- Kanan: Detail + Dropdown Status --}}
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-4 py-6">
                             {{-- Tombol Detail --}}
                             <a href="{{ route('admin.forms.show', $form) }}"
                                 class="inline-flex items-center text-primary hover:text-primary-dark">
