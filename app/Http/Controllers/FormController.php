@@ -49,7 +49,7 @@ class FormController extends Controller
             ->create($request->validated());
 
         return redirect()->route('admin.forms.index')
-            ->with('status', 'Form created successfully.');
+            ->with('success', 'Form created successfully.');
     }
 
     /**
