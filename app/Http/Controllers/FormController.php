@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFormRequest;
+use App\Http\Requests\UpdateFormRequest;
 use App\Models\Form;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,7 +57,10 @@ class FormController extends Controller
      */
     public function show(Form $form)
     {
-        //
+        if ($form->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('admin.forms.show', compact('form'));
     }
 
     /**
@@ -64,19 +68,31 @@ class FormController extends Controller
      */
     public function edit(Form $form)
     {
-        //
+        if ($form->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('admin.forms.edit', compact('form'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Form $form)
+    public function update(UpdateFormRequest $request, Form $form)
     {
-        //
+
+        if ($form->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $form->update($request->validated());
+
+        return redirect()
+            ->route('admin.forms.show', $form)
+            ->with('success', 'Form berhasil diperbarui.');
     }
     public function toggle(Request $request, Form $form)
     {
-        
+
         if ($form->user_id !== Auth::id()) {
             abort(403);
         }
