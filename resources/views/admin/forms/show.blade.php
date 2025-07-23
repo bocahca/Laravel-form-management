@@ -69,7 +69,11 @@
                 {{-- Kembali & Tambah Section --}}
                 <div class="px-6 py-4 border-t flex justify-between bg-white">
                     <a href="{{ route('admin.forms.index') }}"
-                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                        class="px-4 py-2 inline-flex items-center text-gray-700 hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
                         Kembali
                     </a>
                     <a href="#" class="flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">

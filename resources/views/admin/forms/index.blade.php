@@ -9,6 +9,11 @@
         <div class="mb-6">
             <h1 class="text-2xl font-semibold text-gray-800">Daftar Form</h1>
         </div>
+        @if (session('success'))
+            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
 
         {{-- Baris Search + Button --}}
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 space-y-4 md:space-y-0">
