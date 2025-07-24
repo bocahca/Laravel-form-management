@@ -280,7 +280,7 @@
                                                         </form>
                                                     @endif
                                                     {{-- Tombol Edit Pertanyaan --}}
-                                                    <a href="#"
+                                                    <a href="{{ route('admin.sections.questions.edit', [$section, $question]) }}"
                                                         class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

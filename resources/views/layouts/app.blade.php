@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- Masukkan CSS/JS via Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="font-sans antialiased bg-gray-100">
@@ -73,6 +74,7 @@
         </div>
     </div>
 
+    @livewireStyles
 </body>
 
 </html>
