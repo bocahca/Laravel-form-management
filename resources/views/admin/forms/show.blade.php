@@ -94,7 +94,8 @@
                                             <div class="flex items-center gap-x-1.5">
                                                 {{-- Tombol Naik Posisi --}}
                                                 @if (!$loop->first)
-                                                    <form action="{{ route('admin.forms.sections.moveUp',[$form, $section]) }}"
+                                                    <form
+                                                        action="{{ route('admin.forms.sections.moveUp', [$form, $section]) }}"
                                                         method="POST" class="inline-flex">
                                                         @csrf
                                                         @method('PATCH')
@@ -112,7 +113,8 @@
 
                                                 {{-- Tombol Turun Posisi --}}
                                                 @if (!$loop->last)
-                                                    <form action="{{ route('admin.forms.sections.moveDown', [$form,$section]) }}"
+                                                    <form
+                                                        action="{{ route('admin.forms.sections.moveDown', [$form, $section]) }}"
                                                         method="POST" class="inline-flex">
                                                         @csrf
                                                         @method('PATCH')
@@ -133,7 +135,7 @@
                                                     <div class="w-px h-5 bg-primary-dark"></div>
                                                 @endif
                                                 {{-- Edit Section --}}
-                                                <a href="{{ route('admin.forms.sections.edit',[$form, $section]) }}"
+                                                <a href="{{ route('admin.forms.sections.edit', [$form, $section]) }}"
                                                     class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -143,8 +145,9 @@
                                                     </svg>
                                                 </a>
                                                 {{-- Delete Section --}}
-                                                <form action="{{ route('admin.forms.sections.destroy', [$form, $section]) }}" method="POST"
-                                                    onsubmit="return confirm('Hapus section ini?');">
+                                                <form
+                                                    action="{{ route('admin.forms.sections.destroy', [$form, $section]) }}"
+                                                    method="POST" onsubmit="return confirm('Hapus section ini?');">
                                                     @csrf @method('DELETE')
                                                     <button type="submit"
                                                         class="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
@@ -161,7 +164,8 @@
                                         <p class="text-neutral-200 mt-1 text-sm">{{ $section->description }}</p>
                                     </div>
                                     {{-- Tambah Pertanyaan --}}
-                                    <a href="#" {{-- TODO: Ganti dengan route create question --}}
+                                    <a href="{{ route('admin.sections.questions.create', $section) }}"
+                                        {{-- TODO: Ganti dengan route create question --}}
                                         class="flex-shrink-0 inline-flex items-center px-3 py-2 bg-green-600 text-white text-xs font-bold rounded-md hover:bg-gray-50 border border-gray-300 ">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="2.5" stroke="currentColor" class="w-4 h-4 mr-1.5">
@@ -174,47 +178,109 @@
 
                                 {{-- Body Section (Putih) - Daftar Pertanyaan --}}
                                 <div class="bg-white px-6 py-4 rounded-b-lg border-x border-b border-gray-200">
-                                    <div class="space-y-5">
-                                        @forelse ($section->questions as $question)
-                                            <div class="flex items-start justify-between gap-x-4">
+                                    <div class="space-y-6">
+                                        @forelse ($section->questions()->orderBy('position')->get() as $question)
+                                            {{-- Wrapper untuk setiap baris pertanyaan --}}
+                                            <div class="flex items-start justify-between gap-x-4 py-2">
+
+                                                {{-- Kiri: Nomor, Teks Pertanyaan, dan Preview Input --}}
                                                 <div class="flex-1">
-                                                    <p class="font-medium text-gray-900">{{ $loop->iteration }}.
-                                                        {{ $question->text }}</p>
+                                                    <div class="flex items-center mb-3">
+                                                        <span
+                                                            class="font-semibold text-gray-800 mr-2">{{ $loop->iteration }}.</span>
+                                                        <p class="font-semibold text-gray-800">
+                                                            {{ $question->question_text }}</p>
+                                                    </div>
+
                                                     {{-- Tipe input preview --}}
-                                                    <div class="mt-2 text-sm">
+                                                    <div class="ml-6 text-sm">
+                                                        @php
+                                                            $commonClasses =
+                                                                'w-full max-w-sm border-gray-300 rounded-md bg-gray-50 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
+                                                            $optionClasses =
+                                                                'form-radio text-primary border-gray-400 bg-gray-100 focus:ring-primary/50';
+                                                            $checkboxClasses =
+                                                                'form-checkbox text-primary border-gray-400 bg-gray-100 rounded focus:ring-primary/50';
+                                                        @endphp
+
                                                         @if ($question->type === 'text')
-                                                            <input type="text" disabled placeholder="Jawaban Teks"
-                                                                class="w-full max-w-sm border-gray-300 rounded-md bg-gray-50" />
-                                                        @elseif($question->type === 'checkbox')
-                                                            <div class="flex flex-col gap-2">
-                                                                @foreach (['Checkbox 1', 'Checkbox 2'] as $opt)
-                                                                    {{-- Ganti dengan $question->options --}}
-                                                                    <label class="inline-flex items-center text-gray-600">
-                                                                        <input type="checkbox" disabled
-                                                                            class="form-checkbox rounded text-indigo-600 bg-gray-200 border-gray-400" />
-                                                                        <span class="ml-2">{{ $opt }}</span>
+                                                            <input type="text" class="{{ $commonClasses }}">
+                                                        @elseif ($question->type === 'textarea')
+                                                            <textarea rows="3" class="{{ $commonClasses }}"></textarea>
+                                                        @elseif ($question->type === 'dropdown')
+                                                            <select class="{{ $commonClasses }}">
+                                                                <option>Pilih salah satu...</option>
+                                                                @foreach ($question->options ?? [] as $opt)
+                                                                    <option>{{ $opt->option_text }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        @elseif ($question->type === 'radio')
+                                                            <div class="flex items-center gap-x-6">
+                                                                @foreach ($question->options ?? [] as $opt)
+                                                                    <label class="inline-flex items-center text-gray-700">
+                                                                        <input type="radio"
+                                                                            name="radio-preview-{{ $question->id }}"
+                                                                            class="{{ $optionClasses }}">
+                                                                        <span
+                                                                            class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach
                                                             </div>
-                                                        @elseif($question->type === 'radio')
-                                                            <div class="flex flex-col gap-2">
-                                                                @foreach (['Radio 1', 'Radio 2'] as $opt)
-                                                                    {{-- Ganti dengan $question->options --}}
-                                                                    <label class="inline-flex items-center text-gray-600">
-                                                                        <input type="radio"
-                                                                            name="radio-preview-{{ $question->id }}"
-                                                                            disabled
-                                                                            class="form-radio text-indigo-600 bg-gray-200 border-gray-400" />
-                                                                        <span class="ml-2">{{ $opt }}</span>
+                                                        @elseif($question->type === 'checkbox')
+                                                            <div class="flex items-center gap-x-6">
+                                                                @foreach ($question->options ?? [] as $opt)
+                                                                    <label class="inline-flex items-center text-gray-700">
+                                                                        <input type="checkbox"
+                                                                            class="{{ $checkboxClasses }}">
+                                                                        <span
+                                                                            class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach
                                                             </div>
                                                         @endif
                                                     </div>
                                                 </div>
-                                                {{-- Edit/Delete Question --}}
+
+                                                {{-- Kanan: Tombol Aksi Pertanyaan (Urutan, Edit, Hapus) --}}
                                                 <div class="flex items-center space-x-2 flex-shrink-0">
-                                                    <a href="#" {{-- TODO: Ganti dengan route edit question --}}
+                                                    {{-- Tombol Naik Posisi --}}
+                                                    @if (!$loop->first)
+                                                        <form
+                                                            action="{{ route('admin.sections.questions.moveUp', [$section, $question]) }}"
+                                                            method="POST" class="inline-flex">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" title="Naikkan Posisi"
+                                                                class="p-1.5 bg-gray-100 text-gray-500 rounded-full hover:bg-gray-200">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor" stroke-width="2.5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M5 15l7-7 7 7" />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                    {{-- Tombol Turun Posisi --}}
+                                                    @if (!$loop->last)
+                                                        <form
+                                                            action="{{ route('admin.sections.questions.moveDown', [$section, $question]) }}"
+                                                            method="POST" class="inline-flex">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" title="Turunkan Posisi"
+                                                                class="p-1.5 bg-gray-100 text-gray-500 rounded-full hover:bg-gray-200">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor" stroke-width="2.5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M19 9l-7 7-7-7" />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                    {{-- Tombol Edit Pertanyaan --}}
+                                                    <a href="#"
                                                         class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -223,9 +289,13 @@
                                                                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                                         </svg>
                                                     </a>
-                                                    <form action="#" {{-- TODO: Ganti dengan route destroy question --}} method="POST"
+                                                    {{-- Tombol Hapus Pertanyaan --}}
+                                                    <form
+                                                        action="{{ route('admin.sections.questions.destroy', [$section, $question]) }}"
+                                                        method="POST"
                                                         onsubmit="return confirm('Hapus pertanyaan ini?');">
-                                                        @csrf @method('DELETE')
+                                                        @csrf
+                                                        @method('DELETE')
                                                         <button type="submit"
                                                             class="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
