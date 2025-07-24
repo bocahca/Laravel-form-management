@@ -34,10 +34,17 @@ Route::middleware(['auth', 'role:admin'])
         Route::patch('forms/{form}/toggle', [FormController::class, 'toggle'])
             ->name('forms.toggle');
         Route::resource('forms', FormController::class);
+
+        Route::resource('forms.sections', SectionController::class)
+            ->except('show');
         Route::patch('forms/{form}/sections/{section}/up',    [SectionController::class, 'moveUp'])
             ->name('forms.sections.moveUp');
         Route::patch('forms/{form}/sections/{section}/down',  [SectionController::class, 'moveDown'])
             ->name('forms.sections.moveDown');
+
+        // Nested di bawah forms.sections
+        Route::resource('forms.sections.questions', QuestionController::class)
+            ->except('show');
     });
 
 Route::middleware(['auth', 'role:user'])
