@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -43,8 +44,12 @@ Route::middleware(['auth', 'role:admin'])
             ->name('forms.sections.moveDown');
 
         // Nested di bawah forms.sections
-        Route::resource('forms.sections.questions', QuestionController::class)
+        Route::resource('sections.questions', QuestionController::class)
             ->except('show');
+        Route::patch('sections/{section}/questions/{question}/up',    [QuestionController::class, 'moveUp'])
+            ->name('sections.questions.moveUp');
+        Route::patch('sections/{section}/questions/{question}/down',  [QuestionController::class, 'moveDown'])
+            ->name('sections.questions.moveDown');
     });
 
 Route::middleware(['auth', 'role:user'])
