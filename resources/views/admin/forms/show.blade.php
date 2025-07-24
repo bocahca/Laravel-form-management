@@ -94,7 +94,7 @@
                                             <div class="flex items-center gap-x-1.5">
                                                 {{-- Tombol Naik Posisi --}}
                                                 @if (!$loop->first)
-                                                    <form action="#"{{-- route('admin.sections.moveUp', $section) --}}
+                                                    <form action="{{ route('admin.forms.sections.moveUp',[$form, $section]) }}"
                                                         method="POST" class="inline-flex">
                                                         @csrf
                                                         @method('PATCH')
@@ -112,7 +112,7 @@
 
                                                 {{-- Tombol Turun Posisi --}}
                                                 @if (!$loop->last)
-                                                    <form action="#"{{-- route('admin.sections.moveDown', $section) --}}
+                                                    <form action="{{ route('admin.forms.sections.moveDown', [$form,$section]) }}"
                                                         method="POST" class="inline-flex">
                                                         @csrf
                                                         @method('PATCH')
