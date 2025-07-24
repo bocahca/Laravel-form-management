@@ -15,7 +15,7 @@
                     {{-- Kiri: Judul, Deskripsi, Meta --}}
                     <div>
                         <div class="flex items-center gap-x-3 mb-2">
-                            <h1 class="text-2xl font-bold text-gray-800">{{ $form->title }}</h1>
+                            <h1 class="text-3xl font-bold text-gray-800">{{ $form->title }}</h1>
                             {{-- Tombol Edit Form --}}
                             <a href="{{ route('admin.forms.edit', $form) }}"
                                 class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
@@ -70,7 +70,7 @@
                             </svg>
                             Kembali
                         </a>
-                        <a href="#" {{-- TODO: Ganti dengan route create section --}}
+                        <a href="{{ route('admin.forms.sections.create', $form) }}"
                             class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-md hover:bg-indigo-700">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2.5">
@@ -90,7 +90,7 @@
                                 <div class="bg-primary p-4 rounded-t-lg flex justify-between items-start gap-4">
                                     <div>
                                         <div class="flex items-center gap-x-2">
-                                            <h2 class="text-xl font-bold text-neutral-50">{{ $section->title }}</h2>
+                                            <h2 class="text-l font-bold text-neutral-50">{{ $section->title }}</h2>
                                             <div class="flex items-center gap-x-1.5">
                                                 {{-- Tombol Naik Posisi --}}
                                                 @if (!$loop->first)
@@ -128,12 +128,12 @@
                                                     </form>
                                                 @endif
 
-                                                {{-- Spacer (opsional, jika perlu jarak) --}}
+                                                {{-- Spacer --}}
                                                 @if (!$loop->first || !$loop->last)
                                                     <div class="w-px h-5 bg-primary-dark"></div>
                                                 @endif
                                                 {{-- Edit Section --}}
-                                                <a href="#" {{-- TODO: Ganti dengan route edit section --}}
+                                                <a href="{{ route('admin.forms.sections.edit',[$form, $section]) }}"
                                                     class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -143,7 +143,7 @@
                                                     </svg>
                                                 </a>
                                                 {{-- Delete Section --}}
-                                                <form action="#" {{-- TODO: Ganti dengan route destroy section --}} method="POST"
+                                                <form action="{{ route('admin.forms.sections.destroy', [$form, $section]) }}" method="POST"
                                                     onsubmit="return confirm('Hapus section ini?');">
                                                     @csrf @method('DELETE')
                                                     <button type="submit"
