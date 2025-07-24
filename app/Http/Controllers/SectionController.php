@@ -68,27 +68,30 @@ class SectionController extends Controller
             ->with('success', 'Section berhasil diupdate!');
     }
 
-    public function moveUp(Form $form, Section $section): RedirectResponse
+    public function moveUp(Form $form, Section $section)
     {
         abort_unless($section->form_id === $form->id, 404);
 
-        $above = $form->sections()
-            ->where('position', '<', $section->position)
-            ->orderByDesc('position')
-            ->first();
+        $sections = $form->sections()->orderBy('position')->get();
+        $currentIndex = $sections->search(function ($item) use ($section) {
+            return $item->id === $section->id;
+        });
 
-        if ($above) {
+        if ($currentIndex > 0) {
+            $above = $sections[$currentIndex - 1];
+
             // Swap position
-            $tmp = $above->position;
-            $above->position   = $section->position;
-            $section->position = $tmp;
+            $oldPosition = $section->position;
+            $section->position = $above->position;
+            $above->position = $oldPosition;
 
-            $above->save();
             $section->save();
+            $above->save();
         }
 
         return back()->with('success', 'Section berhasil dinaikkan.');
     }
+
 
     /**
      * Turunkan posisi Section satu tingkat.
