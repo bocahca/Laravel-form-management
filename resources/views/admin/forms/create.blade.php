@@ -33,7 +33,7 @@
             <div class="mt-4 flex items-center">
                 <input type="hidden" name="is_active" value="0">
             </div>
-            <button type="submit" class="mt-6 bg-primary text-white px-4 py-2 rounded hover:bg-primary/90">
+            <button type="submit" class="mt-6 bg-primary text-white px-4 py-2 rounded hover:bg-primary/90" onclick="this.disabled=true; this.form.submit();">
                 Simpan
             </button>
         </form>
