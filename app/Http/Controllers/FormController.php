@@ -111,6 +111,14 @@ class FormController extends Controller
      */
     public function destroy(Form $form)
     {
-        //
+        if ($form->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $form->delete();
+
+        return redirect()
+            ->route('admin.forms.index')
+            ->with('success', 'Form deleted successfully.');
     }
 }
