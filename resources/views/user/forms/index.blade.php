@@ -24,9 +24,9 @@
             </div>
 
             {{-- Tombol tampilkan semua jika sedang mencari --}}
-            @if(request('q'))
+            @if (request('q'))
                 <a href="{{ route('user.forms.index') }}"
-                   class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-600 rounded hover:bg-gray-200 text-sm font-medium border border-gray-300">
+                    class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-600 rounded hover:bg-gray-200 text-sm font-medium border border-gray-300">
                     Tampilkan Semua
                 </a>
             @endif
@@ -39,7 +39,8 @@
         @else
             <div class="space-y-4">
                 @foreach ($forms as $form)
-                    <div class="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div
+                        class="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row md:items-center md:justify-between">
                         {{-- Kiri: judul, deskripsi, tanggal --}}
                         <div class="flex-1 pr-4">
                             <h2 class="text-lg font-semibold text-gray-800 mb-1">
@@ -56,10 +57,25 @@
                         </div>
                         {{-- Kanan: tombol isi --}}
                         <div class="mt-4 md:mt-0 flex items-center gap-4">
-                            <a href="#"
-                                class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 font-medium">
-                                Isi Form
-                            </a>
+                            <div class="mt-4 md:mt-0 flex items-center gap-4">
+                                @if (in_array($form->id, $pendingFormIds))
+                                    <span class="tooltip-disabled-btn">
+                                        <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded cursor-not-allowed"
+                                            disabled>
+                                            Isi Form
+                                        </button>
+                                        <span class="tooltip-text">
+                                            Masih ada submission pending untuk form ini.
+                                        </span>
+                                    </span>
+                                @else
+                                    <a href="{{ route('user.forms.fill', $form) }}"
+                                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 font-medium">
+                                        Isi Form
+                                    </a>
+                                @endif
+                            </div>
+
                         </div>
                     </div>
                 @endforeach

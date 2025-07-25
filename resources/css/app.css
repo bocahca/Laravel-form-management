@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.tooltip-disabled-btn {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-disabled-btn .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background: #e53e3e;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 0.95em;
+    pointer-events: none;
+}
+
+.tooltip-disabled-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
