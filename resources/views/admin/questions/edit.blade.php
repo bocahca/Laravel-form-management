@@ -28,7 +28,7 @@
             @enderror
 
             <label class="block mt-4 mb-2 font-medium">Tipe Jawaban</label>
-            <select name="type" class="w-full border rounded p-2 @error('type') border-red-500 @enderror">
+            <select id="type" name="type" class="w-full border rounded p-2 @error('type') border-red-500 @enderror">
                 <option value="">-- Pilih Tipe --</option>
                 <option value="text" {{ old('type', $question->type) == 'text' ? 'selected' : '' }}>Text</option>
                 <option value="checkbox" {{ old('type', $question->type) == 'checkbox' ? 'selected' : '' }}>Checkbox
@@ -38,23 +38,36 @@
             @error('type')
                 <p class="text-red-600 text-sm">{{ $message }}</p>
             @enderror
-
-            {{-- Option input (dynamic, bisa pakai JS, tapi cukup manual dulu) --}}
-            <div class="mt-4" id="options-container">
-                <label class="block mb-2 font-medium">Opsi (hanya untuk tipe checkbox/radio)</label>
+            <div id="options-container" class="mt-4"
+                style="{{ !in_array(old('type', $question->type ?? ''), ['dropdown', 'radio', 'checkbox']) ? 'display:none;' : '' }}">
+                <label class="block mb-2 font-medium">Opsi (pisahkan dengan koma)</label>
                 <textarea name="options" class="w-full border rounded p-2 @error('options') border-red-500 @enderror" rows="3"
-                    placeholder="Pisahkan dengan koma, contoh: Pilihan 1, Pilihan 2">{{ old('options', $question->options ? implode(', ', $question->options) : '') }}</textarea>
+                    placeholder="Contoh: Opsi 1, Opsi 2">{{ old('options', isset($question) && $question->options ? $question->options->pluck('option_text')->implode(', ') : '') }}</textarea>
                 @error('options')
                     <p class="text-red-600 text-sm">{{ $message }}</p>
                 @enderror
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const typeSelect = document.getElementById('type');
+                    const optionsContainer = document.getElementById('options-container');
+                    typeSelect.addEventListener('change', function() {
+                        if (['dropdown', 'checkbox', 'radio'].includes(this.value)) {
+                            optionsContainer.style.display = '';
+                        } else {
+                            optionsContainer.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
 
             <div class="flex justify-end space-x-2 mt-6">
                 <button type="reset" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
                     Reset
                 </button>
                 <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90">
-                    Update Pertanyaan
+                    Simpan Pertanyaan
                 </button>
             </div>
         </form>

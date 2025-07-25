@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    @livewireStyles
+    @livewireScripts
 </body>
 
 </html>
