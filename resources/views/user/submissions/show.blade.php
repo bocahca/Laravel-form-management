@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Isi Formulir: ' . $form->title)
+@section('title', 'Review Jawaban: ' . $form->title)
 
 @section('content')
     <div class="p-8">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="flex flex-col items-end gap-y-3 flex-shrink-0 ml-6">
-                        <a href="{{ route('user.forms.index') }}"
+                        <a href="{{ url()->previous() }}"
                             class="px-4 py-2 inline-flex items-center text-gray-700 hover:text-gray-900">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2">
@@ -29,10 +29,8 @@
                     </div>
                 </div>
 
-                {{-- FORM FILL --}}
-                <form action="{{ route('user.forms.submit', $form) }}" method="POST"
-                    class="mt-8 pt-8 border-t border-gray-400">
-                    @csrf
+                {{-- REVIEW ANSWERS --}}
+                <div class="mt-8 pt-8 border-t border-gray-400">
                     <div class="space-y-6">
                         @foreach ($form->sections as $section)
                             <div class="rounded-lg">
@@ -47,60 +45,48 @@
                                 <div class="bg-white px-6 py-4 rounded-b-lg border-x border-b border-gray-200">
                                     <div class="space-y-6">
                                         @foreach ($section->questions()->orderBy('position')->get() as $question)
+                                            @php
+                                                $answer = $submission->answers
+                                                    ->where('question_id', $question->id)
+                                                    ->first();
+                                                // Cek untuk multi option
+                                                $selectedOptions =
+                                                    $answer && $answer->options
+                                                        ? $answer->options->pluck('option_value')->all()
+                                                        : [];
+                                            @endphp
                                             <div class="flex items-start gap-x-4 py-2">
                                                 <div class="flex-1">
                                                     <div class="flex items-center mb-3">
                                                         <span
                                                             class="font-semibold text-gray-800 mr-2">{{ $loop->iteration }}.</span>
-                                                        <label for="q{{ $question->id }}"
-                                                            class="font-semibold text-gray-800">
+                                                        <label class="font-semibold text-gray-800">
                                                             {{ $question->question_text }}
                                                         </label>
                                                     </div>
                                                     <div class="ml-6 text-sm">
-                                                        @php
-                                                            $commonClasses =
-                                                                'w-full max-w-sm border-gray-300 rounded-md bg-gray-50 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
-                                                            $optionClasses =
-                                                                'form-radio text-primary border-gray-400 bg-gray-100 focus:ring-primary/50';
-                                                            $checkboxClasses =
-                                                                'form-checkbox text-primary border-gray-400 bg-gray-100 rounded focus:ring-primary/50';
-                                                        @endphp
-
-                                                        @if ($question->type === 'text')
-                                                            <input type="text" name="answers[{{ $question->id }}]"
-                                                                id="q{{ $question->id }}" class="{{ $commonClasses }}">
-                                                        @elseif ($question->type === 'textarea')
-                                                            <textarea name="answers[{{ $question->id }}]" rows="3" id="q{{ $question->id }}" class="{{ $commonClasses }}"></textarea>
-                                                        @elseif ($question->type === 'dropdown')
-                                                            <select name="answers[{{ $question->id }}]"
-                                                                id="q{{ $question->id }}" class="{{ $commonClasses }}">
-                                                                <option value="">Pilih salah satu...</option>
-                                                                @foreach ($question->options ?? [] as $opt)
-                                                                    <option value="{{ $opt->option_value }}">
-                                                                        {{ $opt->option_text }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        @elseif ($question->type === 'radio')
-                                                            <div class="flex items-center gap-x-6">
-                                                                @foreach ($question->options ?? [] as $opt)
+                                                        @if ($question->type === 'text' || $question->type === 'textarea')
+                                                            <input type="text" readonly
+                                                                value="{{ $answer?->answer_text ?? '-' }}"
+                                                                class="w-full max-w-sm border-gray-300 rounded-md bg-gray-50 text-sm shadow-sm text-gray-700" />
+                                                        @elseif ($question->type === 'dropdown' || $question->type === 'radio')
+                                                            <div class="flex items-center gap-x-4">
+                                                                @foreach ($question->options as $opt)
                                                                     <label class="inline-flex items-center text-gray-700">
-                                                                        <input type="radio"
-                                                                            name="answers[{{ $question->id }}]"
-                                                                            value="{{ $opt->option_value }}"
-                                                                            class="{{ $optionClasses }}">
+                                                                        <input
+                                                                            type="{{ $question->type === 'dropdown' ? 'radio' : 'radio' }}"
+                                                                            disabled
+                                                                            {{ $answer && $answer->answer_text == $opt->option_value ? 'checked' : '' }}>
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach
                                                             </div>
-                                                        @elseif($question->type === 'checkbox')
-                                                            <div class="flex items-center gap-x-6">
-                                                                @foreach ($question->options ?? [] as $opt)
+                                                        @elseif ($question->type === 'checkbox')
+                                                            <div class="flex items-center gap-x-4">
+                                                                @foreach ($question->options as $opt)
                                                                     <label class="inline-flex items-center text-gray-700">
-                                                                        <input type="checkbox"
-                                                                            name="answers[{{ $question->id }}][]"
-                                                                            value="{{ $opt->option_value }}"
-                                                                            class="{{ $checkboxClasses }}">
+                                                                        <input type="checkbox" disabled
+                                                                            {{ in_array($opt->option_value, $selectedOptions) ? 'checked' : '' }}>
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach
@@ -115,12 +101,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="flex justify-end mt-8">
-                        <button type="submit" class="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90">
-                            Kirim Jawaban
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
