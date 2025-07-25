@@ -19,6 +19,11 @@ class Section extends Model
     {
         return $this->belongsTo(Form::class);
     }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('position', 'asc');
+    }
     public function questions()
     {
         return $this->hasMany(Question::class);

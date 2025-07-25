@@ -2,6 +2,9 @@
     @php
         $role = auth()->user()->role;
         $isActive = request()->routeIs("$role.dashboard");
+        $isForms = request()->routeIs("$role.forms.*");
+        $isForms = request()->routeIs("$role.forms.*");
+        $isSubmissions = request()->routeIs("$role.submissions.*");
     @endphp
     {{-- Home --}}
     <a href="{{ route("$role.dashboard") }}" class="flex items-center rounded-md transition-colors duration-200 w-full"
@@ -24,11 +27,14 @@
     </a>
     @if ($role === 'admin')
         {{-- Forms --}}
-        <a href="#"
-            class="flex items-center space-x-3 px-3 py-2 rounded-md transition-colors
-              {{ request()->routeIs('forms.*')
-                  ? 'bg-primary text-white'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-primary' }}">
+        <a href="{{ route("$role.forms.index") }}"
+            class="flex items-center rounded-md transition-colors duration-200 w-full"
+            :class="sidebarOpen
+                ?
+                '{{ $isForms
+                    ? 'bg-primary text-white px-3 py-2 justify-start'
+                    : 'text-gray-700 hover:bg-gray-100 hover:text-primary px-3 py-2 justify-start' }}' :
+                '{{ $isForms ? 'bg-primary text-white p-2 justify-center' : 'text-gray-700 hover:bg-gray-100 p-2 justify-center' }}'">
             {{-- Icon Clipboard --}}
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6 flex-shrink-0">
@@ -38,11 +44,13 @@
             <span x-show="sidebarOpen" class="font-medium">Forms</span>
         </a>
         {{-- Submissions --}}
-        <a href="#"
-            class="flex items-center space-x-3 px-3 py-2 rounded-md transition-colors
-              {{ request()->routeIs('submissions.*')
-                  ? 'bg-primary text-white'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-primary' }}">
+        <a href="#" class="flex items-center rounded-md transition-colors duration-200 w-full"
+            :class="sidebarOpen
+                ?
+                '{{ $isSubmissions
+                    ? 'bg-primary text-white px-3 py-2 justify-start'
+                    : 'text-gray-700 hover:bg-gray-100 hover:text-primary px-3 py-2 justify-start' }}' :
+                '{{ $isSubmissions ? 'bg-primary text-white p-2 justify-center' : 'text-gray-700 hover:bg-gray-100 p-2 justify-center' }}'">
             {{-- Icon Clipboard List --}}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                 class="size-6 flex-shrink-0">
