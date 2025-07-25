@@ -7,6 +7,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFormController;
+use App\Http\Controllers\UserSubmissionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('submissions/{submission}', [UserSubmissionController::class, 'show'])
+        ->name('user.submissions.show');
 });
 
 Route::middleware(['auth', 'role:admin'])
@@ -61,6 +64,8 @@ Route::middleware(['auth', 'role:user'])
             ->name('dashboard');
         Route::get('/forms', [UserFormController::class, 'index'])
             ->name('forms.index');
+        Route::get('forms/{form}/fill', [UserFormController::class, 'fill'])->name('forms.fill');
+        Route::post('forms/{form}/submit', [UserFormController::class, 'submit'])->name('forms.submit');
     });
 
 require __DIR__ . '/auth.php';
