@@ -7,7 +7,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Judul --}}
         <div class="mb-6">
-            <h1 class="text-2xl font-semibold text-gray-800">Daftar Form</h1>
+            <h1 class="text-2xl font-semibold text-gray-800">Daftar Formulir</h1>
         </div>
         @if (session('success'))
             <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
