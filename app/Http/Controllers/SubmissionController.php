@@ -9,7 +9,21 @@ class SubmissionController extends Controller
 {
     public function index(Request $request)
     {
-        $submissions = Submission::with('form', 'user')->latest()->paginate(20);
+        $query = Submission::with('form', 'user')->latest();
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($search = $request->input('q')) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('form', fn($q2) => $q2->where('title', 'ILIKE', "%$search%"))
+                    ->orWhereHas('user', fn($q2) => $q2->where('name', 'ILIKE', "%$search%"));
+            });
+        }
+
+        $submissions = $query->orderByDesc('created_at')->paginate(20);
+
         return view('admin.submissions.index', compact('submissions'));
     }
 
