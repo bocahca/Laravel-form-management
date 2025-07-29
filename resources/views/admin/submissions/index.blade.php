@@ -46,13 +46,13 @@
                             <td class="px-4 py-2">{{ $submission->form->title ?? '-' }}</td>
                             <td class="px-4 py-2">{{ $submission->user->name ?? '-' }}</td>
                             <td class="px-4 py-2">{{ $submission->created_at->format('d M Y H:i') }}</td>
-                            <td class="px-4 py-2">
+                            <td class="px-4 py-2 text-start">
                                 @if ($submission->status == 'pending')
-                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Pending</span>
+                                    <span class="text-yellow-600 py-1">Pending</span>
                                 @elseif($submission->status == 'approved')
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Approved</span>
+                                    <span class="text-green-600 py-1 ">Approved</span>
                                 @else
-                                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Rejected</span>
+                                    <span class=" text-red 600 py-1 ">Rejected</span>
                                 @endif
                             </td>
                             <td class="px-4 py-2">
