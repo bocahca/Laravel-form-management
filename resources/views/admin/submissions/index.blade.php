@@ -3,7 +3,7 @@
 @section('title', 'Review Submissions')
 
 @section('content')
-    <div class="max-w-5xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-2xl font-semibold mb-6 text-gray-800">Review Submissions</h1>
 
         {{-- Filter/Search --}}
