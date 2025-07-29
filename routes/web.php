@@ -5,6 +5,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFormController;
 use App\Http\Controllers\UserSubmissionController;
@@ -54,6 +55,10 @@ Route::middleware(['auth', 'role:admin'])
             ->name('sections.questions.moveUp');
         Route::patch('sections/{section}/questions/{question}/down',  [QuestionController::class, 'moveDown'])
             ->name('sections.questions.moveDown');
+
+        Route::get('submissions', [SubmissionController::class, 'index'])->name('submissions.index');
+        Route::get('submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
+        Route::patch('submissions/{submission}/review', [SubmissionController::class, 'review'])->name('submissions.review');
     });
 
 Route::middleware(['auth', 'role:user'])
