@@ -30,7 +30,10 @@ class SubmissionController extends Controller
     public function show(Submission $submission)
     {
         $submission->load(['form', 'user', 'answers.question', 'answers.options']);
-        return view('admin.submissions.show', compact('submission'));
+        return view('admin.submissions.show', [
+            'submission' => $submission,
+            'form'       => $submission->form,
+        ]);
     }
 
     public function review(Request $request, Submission $submission)

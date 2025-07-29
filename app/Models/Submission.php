@@ -13,6 +13,7 @@ class Submission extends Model
         'form_id',
         'user_id',
         'status',
+        'review_note',
         'approved_by',
         'approved_at',
     ];
