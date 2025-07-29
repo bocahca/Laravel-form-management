@@ -44,7 +44,8 @@
     </a>
     @if ($role === 'admin')
         {{-- Submissions --}}
-        <a href="#" class="flex items-center rounded-md transition-colors duration-200 w-full"
+        <a href={{ route('admin.submissions.index') }}
+            class="flex items-center rounded-md transition-colors duration-200 w-full"
             :class="sidebarOpen
                 ?
                 '{{ $isSubmissions
