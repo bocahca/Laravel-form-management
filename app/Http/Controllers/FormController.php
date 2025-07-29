@@ -44,12 +44,12 @@ class FormController extends Controller
      */
     public function store(StoreFormRequest $request)
     {
-        Auth::user()
-            ->forms()
-            ->create($request->validated());
+        $forms = Auth::user()
+                    ->forms()
+                    ->create($request->validated());
 
-        return redirect()->route('admin.forms.index')
-            ->with('success', 'Form created successfully.');
+        return redirect()->route('admin.forms.show', $forms)
+            ->with('success', 'Formulir berhasil dibuat');
     }
 
     /**
@@ -119,6 +119,6 @@ class FormController extends Controller
 
         return redirect()
             ->route('admin.forms.index')
-            ->with('success', 'Form deleted successfully.');
+            ->with('success', 'Formulir berhasil dihapus');
     }
 }
