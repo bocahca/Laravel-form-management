@@ -27,22 +27,39 @@
                                 @elseif($submission->status == 'approved')
                                     <span class="text-green-600 py-1 ">Approved</span>
                                 @else
-                                    <span class=" text-red-800 py-1 ">Rejected</span>
-                                @endif
+                                    <span class=" text-red-800 py-1 ">Rejected</span> @endif
                                 </td>
                         </tr>
+                        @if ($submission->status == 'approved')
+                            <tr>
+                                <td class="font-semibold pr-4 py-1"> Tanggal Approve</td>
+                                <td>{{ $submission->approved_at->format('d M Y H:i') }}</td>
+                            </tr>
+                        @endif
                         <tr>
                             <td class="font-semibold pr-4 py-1">Catatan Review</td>
                             <td class="italic font-semibold">"{{ $submission->review_note ?: '-' }}"</td>
                         </tr>
+                        <tr>
+                            <td class="font-semibold pr-4 py-1">Lihat Submission</td>
+                            <td>
+                                <a href="{{ route('admin.submissions.pdf', $submission->id) }}" target="_blank"
+                                    {{-- Buka di tab baru agar tidak meninggalkan halaman admin --}}
+                                    class="inline-flex items-center px-4 py-2 bg-primary-dark border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 my-5">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                        </path>
+                                    </svg>
+                                    Cetak PDF
+                                </a>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <div class="mb-4">
-                    <a href="{{ route('admin.submissions.show', $submission) }}"
-                        class="inline-flex items-center px-3 py-1 rounded text-blue-700 hover:bg-blue-50 font-medium"
-                        target="_blank">
-                        Lihat Submission
-                    </a>
+
                 </div>
                 @if ($submission->status == 'pending')
                     <form wire:submit.prevent="review">
