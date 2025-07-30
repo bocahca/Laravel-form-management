@@ -17,6 +17,10 @@ class Submission extends Model
         'approved_by',
         'approved_at',
     ];
+    protected $casts = [
+        'approved_at' => 'datetime',
+    ];
+
     public function form()
     {
         return $this->belongsTo(Form::class);
