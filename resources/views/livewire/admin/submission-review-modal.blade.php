@@ -23,7 +23,13 @@
                         </tr>
                         <tr>
                             <td class="font-semibold pr-4 py-1">Status</td>
-                            <td>{{ ucfirst($submission->status) }}</td>
+                            <td @if ($submission->status == 'pending') <span class="text-yellow-600 py-1">Pending</span>
+                                @elseif($submission->status == 'approved')
+                                    <span class="text-green-600 py-1 ">Approved</span>
+                                @else
+                                    <span class=" text-red-800 py-1 ">Rejected</span>
+                                @endif
+                                </td>
                         </tr>
                         <tr>
                             <td class="font-semibold pr-4 py-1">Catatan Review</td>
@@ -39,18 +45,18 @@
                     </a>
                 </div>
                 @if ($submission->status == 'pending')
-                <form wire:submit.prevent="review">
-                    <div class="mb-2">
-                        <label class="block font-medium mb-1">Catatan Review</label>
-                        <textarea wire:model.defer="review_note" rows="2" class="w-full border rounded p-2"></textarea>
-                    </div>
-                    <div class="flex gap-3 mt-3">
-                        <button type="submit" wire:click="$set('status', 'approved')"
-                            class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">Approve</button>
-                        <button type="submit" wire:click="$set('status', 'rejected')"
-                            class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">Reject</button>
-                    </div>
-                </form>
+                    <form wire:submit.prevent="review">
+                        <div class="mb-2">
+                            <label class="block font-medium mb-1">Catatan Review</label>
+                            <textarea wire:model.defer="review_note" rows="2" class="w-full border rounded p-2"></textarea>
+                        </div>
+                        <div class="flex gap-3 mt-3">
+                            <button type="submit" wire:click="$set('status', 'approved')"
+                                class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">Approve</button>
+                            <button type="submit" wire:click="$set('status', 'rejected')"
+                                class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">Reject</button>
+                        </div>
+                    </form>
                 @endif
             </div>
         </div>
