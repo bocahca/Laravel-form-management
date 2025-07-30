@@ -60,7 +60,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
         Route::patch('submissions/{submission}/review', [SubmissionController::class, 'review'])->name('submissions.review');
         Route::get('submissions/{submission}', [SubmissionController::class, 'show'])
-        ->name('submissions.show');
+            ->name('submissions.show');
+        Route::get('submissions/{submission}/pdf', [SubmissionController::class, 'generatePdf'])
+            ->name('submissions.pdf');
     });
 
 Route::middleware(['auth', 'role:user'])
