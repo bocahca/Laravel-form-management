@@ -4,12 +4,15 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Submission;
+use Illuminate\Support\Facades\Auth;
 
 class SubmissionReviewModal extends Component
 {
     public $showModal = false;
     public $submission = null;
     public $review_note = '';
+    public $approved_by = '';
+    public $approved_at = null;
     public $status = '';
 
     protected $listeners = ['showSubmissionReviewModal' => 'show'];
@@ -31,6 +34,8 @@ class SubmissionReviewModal extends Component
         $this->submission->update([
             'status' => $this->status,
             'review_note' => $this->review_note,
+            'approved_by' => Auth::user()->id, // atau ->id jika menyimpan ID
+            'approved_at' => now(),
         ]);
 
         session()->flash('success', 'Status submission berhasil diupdate.');
