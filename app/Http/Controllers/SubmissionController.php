@@ -29,15 +29,6 @@ class SubmissionController extends Controller
         return view('admin.submissions.index', compact('submissions'));
     }
 
-    public function show(Submission $submission)
-    {
-        $submission->load(['form', 'user', 'answers.question', 'answers.options']);
-        return view('admin.submissions.show', [
-            'submission' => $submission,
-            'form'       => $submission->form,
-        ]);
-    }
-
     public function review(Request $request, Submission $submission)
     {
         $request->validate([
