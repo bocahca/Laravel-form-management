@@ -2,45 +2,61 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\Attributes\On;
 
 class SubmissionReviewModal extends Component
 {
-    public $showModal = false;
-    public $submission = null;
-    public $review_note = '';
-    public $approved_by = '';
-    public $approved_at = null;
-    public $status = '';
+    public bool $showModal = false;
+    public ?Submission $submission = null;
+    public string $review_note = '';
 
-    protected $listeners = ['showSubmissionReviewModal' => 'show'];
-
-    public function show($submissionId)
+    /**
+     * Listener untuk event 'openReviewModal'.
+     * Mengambil data submission dan menampilkan modal.
+     */
+    #[On('openReviewModal')]
+    public function openModal($submissionId): void
     {
+        // Ambil data submission beserta relasi yang dibutuhkan
         $this->submission = Submission::with(['form', 'user'])->findOrFail($submissionId);
+
+        // Isi textarea dengan catatan yang sudah ada (jika ada)
         $this->review_note = $this->submission->review_note ?? '';
-        $this->status = $this->submission->status ?? '';
+
         $this->showModal = true;
     }
 
-    public function review()
+    /**
+     * Memproses review (Approve/Reject), mengupdate database,
+     * dan memberitahu komponen lain bahwa proses selesai.
+     */
+    public function processReview(string $newStatus): void
     {
-        $this->validate([
-            'status' => 'required|in:approved,rejected',
-        ]);
+        // Validasi sederhana
+        if (!in_array($newStatus, ['approved', 'rejected']) || !$this->submission) {
+            return;
+        }
 
+        // Update data di database
         $this->submission->update([
-            'status' => $this->status,
+            'status' => $newStatus,
             'review_note' => $this->review_note,
-            'approved_by' => Auth::user()->id, // atau ->id jika menyimpan ID
-            'approved_at' => now(),
+            'reviewed_by' => Auth::id(),
+            // Penting: Hanya isi 'approved_at' jika statusnya 'approved'
+            'approved_at' => $newStatus === 'approved' ? now() : null,
         ]);
 
-        session()->flash('success', 'Status submission berhasil diupdate.');
+        // Tutup modal
         $this->showModal = false;
-        $this->dispatch('submissionReviewed');
+
+        // 💡 KUNCI UTAMA: Pancarkan event untuk memberitahu komponen daftar agar refresh
+        $this->dispatch('submissionUpdated');
+
+        // Reset state internal modal untuk persiapan pembukaan berikutnya
+        $this->reset('submission', 'review_note');
     }
 
     public function render()
