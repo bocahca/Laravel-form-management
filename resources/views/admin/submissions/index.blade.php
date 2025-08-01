@@ -30,7 +30,7 @@
         </form>
 
         <div class="bg-white rounded shadow">
-            <table class="min-w-full">
+            <table class="min-w-full ">
                 <thead>
                     <tr class="bg-primary text-left text-sm text-neutral-100">
                         <th class="px-4 py-2">Form</th>

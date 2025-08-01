@@ -60,8 +60,8 @@
                         <p class="text-neutral-200 mt-1 text-sm">{{ $section->description }}</p>
                     </div>
                     {{-- Tambah Pertanyaan --}}
-                    <a href="{{ route('admin.sections.questions.create', $section) }}" {{-- TODO: Ganti dengan route create question --}}
-                        class="flex-shrink-0 inline-flex items-center px-3 py-2 bg-green-600 text-white text-xs font-bold rounded-md hover:bg-gray-50 border border-gray-300 ">
+                    <a href="{{ route('admin.sections.questions.create', $section) }}"
+                        class="flex-shrink-0 inline-flex items-center px-3 py-2 bg-green-600 text-white text-xs font-bold rounded-md hover:bg-green-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                             stroke="currentColor" class="w-4 h-4 mr-1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -70,14 +70,13 @@
                     </a>
                 </div>
 
-                {{-- Body Section (Putih) - Daftar Pertanyaan --}}
+                {{-- Daftar Pertanyaan --}}
                 <div class="bg-white px-6 py-4 rounded-b-lg border-x border-b border-gray-200">
                     <div class="space-y-6">
                         @forelse ($section->questions()->orderBy('position')->get() as $question)
-                            {{-- Wrapper untuk setiap baris pertanyaan --}}
                             <div class="flex items-start justify-between gap-x-4 py-2">
 
-                                {{-- Kiri: Nomor, Teks Pertanyaan, dan Preview Input --}}
+                                {{-- Nomor, Teks Pertanyaan, dan Preview Input --}}
                                 <div class="flex-1">
                                     <div class="flex items-center mb-3">
                                         <span class="font-semibold text-gray-800 mr-2">{{ $loop->iteration }}.</span>

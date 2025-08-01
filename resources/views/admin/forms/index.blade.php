@@ -78,7 +78,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zM12.375 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zM16.125 12a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                 </svg>
-                                <span class="font-medium text-sm">Detail</span>
+                                <span class="font-medium text-sm">Edit</span>
                             </a>
                         </div>
                     </div>

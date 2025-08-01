@@ -110,7 +110,7 @@
         {{-- HEADER FORM --}}
         <h1>{{ $form->title }}</h1>
         <p>{{ $form->description }}</p>
-        <p class="meta-info">Tanggal Submit: {{ $submission->created_at->format('d F Y') }}</p>
+        <p class="meta-info">Tanggal Submit: {{ $submission->created_at->format('d/m/y') }}</p>
         <p class="meta-info">User: {{ $submission->user->name }}</p>
 
         @foreach ($form->sections as $section)
