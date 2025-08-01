@@ -70,14 +70,14 @@
                             </svg>
                             Kembali
                         </a>
-                        <a href="{{ route('admin.forms.sections.create', $form) }}"
+                        <button type="button" onclick="Livewire.dispatch('openCreateSectionModal')"
                             class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-md hover:bg-green-700">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
                             Tambah Section
-                        </a>
+                        </button>
                     </div>
                 </div>
 
