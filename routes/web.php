@@ -27,8 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('submissions/{submission}', [UserSubmissionController::class, 'show'])
-        ->name('user.submissions.show');
 });
 
 Route::middleware(['auth', 'role:admin'])
@@ -40,21 +38,6 @@ Route::middleware(['auth', 'role:admin'])
         Route::patch('forms/{form}/toggle', [FormController::class, 'toggle'])
             ->name('forms.toggle');
         Route::resource('forms', FormController::class);
-
-        Route::resource('forms.sections', SectionController::class)
-            ->except('show');
-        Route::patch('forms/{form}/sections/{section}/up',    [SectionController::class, 'moveUp'])
-            ->name('forms.sections.moveUp');
-        Route::patch('forms/{form}/sections/{section}/down',  [SectionController::class, 'moveDown'])
-            ->name('forms.sections.moveDown');
-
-        // Nested di bawah forms.sections
-        Route::resource('sections.questions', QuestionController::class)
-            ->except('show');
-        Route::patch('sections/{section}/questions/{question}/up',    [QuestionController::class, 'moveUp'])
-            ->name('sections.questions.moveUp');
-        Route::patch('sections/{section}/questions/{question}/down',  [QuestionController::class, 'moveDown'])
-            ->name('sections.questions.moveDown');
 
         Route::get('submissions', [SubmissionController::class, 'index'])->name('submissions.index');
         Route::get('submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
@@ -73,6 +56,8 @@ Route::middleware(['auth', 'role:user'])
             ->name('forms.index');
         Route::get('forms/{form}/fill', [UserFormController::class, 'fill'])->name('forms.fill');
         Route::post('forms/{form}/submit', [UserFormController::class, 'submit'])->name('forms.submit');
+        Route::get('submissions/{submission}', [UserSubmissionController::class, 'show'])
+            ->name('submissions.show');
     });
 
 require __DIR__ . '/auth.php';
