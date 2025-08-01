@@ -55,6 +55,8 @@ Route::middleware(['auth', 'role:user'])
         Route::post('forms/{form}/submit', [UserFormController::class, 'submit'])->name('forms.submit');
         Route::get('submissions/{submission}', [UserSubmissionController::class, 'show'])
             ->name('submissions.show');
+        Route::get('submissions/{submission}/pdf', [SubmissionController::class, 'generatePdf'])
+            ->name('submissions.pdf');
     });
 
 require __DIR__ . '/auth.php';
