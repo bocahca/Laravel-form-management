@@ -52,7 +52,7 @@
                                                 // Cek untuk multi option
                                                 $selectedOptions =
                                                     $answer && $answer->options
-                                                        ? $answer->options->pluck('option_value')->all()
+                                                        ? $answer->options->pluck('id')->all()
                                                         : [];
                                             @endphp
                                             <div class="flex items-start gap-x-4 py-2">
@@ -76,7 +76,7 @@
                                                                         <input
                                                                             type="{{ $question->type === 'dropdown' ? 'radio' : 'radio' }}"
                                                                             disabled
-                                                                            {{ $answer && $answer->answer_text == $opt->option_value ? 'checked' : '' }}>
+                                                                            {{ $answer && $answer->answer_text == $opt->option_text ? 'checked' : '' }}>
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach
@@ -86,7 +86,7 @@
                                                                 @foreach ($question->options as $opt)
                                                                     <label class="inline-flex items-center text-gray-700">
                                                                         <input type="checkbox" disabled
-                                                                            {{ in_array($opt->option_value, $selectedOptions) ? 'checked' : '' }}>
+                                                                            {{ in_array($opt->id, $selectedOptions) ? 'checked' : '' }}>
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
                                                                 @endforeach

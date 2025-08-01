@@ -77,7 +77,7 @@
                                                                 id="q{{ $question->id }}" class="{{ $commonClasses }}">
                                                                 <option value="">Pilih salah satu...</option>
                                                                 @foreach ($question->options ?? [] as $opt)
-                                                                    <option value="{{ $opt->option_value }}">
+                                                                    <option value="{{ $opt->option_text }}">
                                                                         {{ $opt->option_text }}</option>
                                                                 @endforeach
                                                             </select>
@@ -87,7 +87,7 @@
                                                                     <label class="inline-flex items-center text-gray-700">
                                                                         <input type="radio"
                                                                             name="answers[{{ $question->id }}]"
-                                                                            value="{{ $opt->option_value }}"
+                                                                            value="{{ $opt->option_text }}"
                                                                             class="{{ $optionClasses }}">
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>
@@ -99,7 +99,7 @@
                                                                     <label class="inline-flex items-center text-gray-700">
                                                                         <input type="checkbox"
                                                                             name="answers[{{ $question->id }}][]"
-                                                                            value="{{ $opt->option_value }}"
+                                                                            value="{{ $opt->id }}"
                                                                             class="{{ $checkboxClasses }}">
                                                                         <span class="ml-2">{{ $opt->option_text }}</span>
                                                                     </label>

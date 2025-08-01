@@ -54,19 +54,18 @@ class UserFormController extends Controller
         $rules = [];
         foreach ($form->sections as $section) {
             foreach ($section->questions as $question) {
-                // Boleh diubah sesuai kebutuhan (misal required, dll)
-                $field = "q_" . $question->id;
+                $field = "answers.{$question->id}";
                 if ($question->type === 'checkbox') {
-                    $rules[$field] = 'array';
+                    $rules[$field] = 'nullable|array';
                 } else {
                     $rules[$field] = 'nullable|string';
                 }
             }
         }
-        $validated = $request->validate($rules);
+        $request->validate($rules);
 
         // Simpan submission & jawaban ke DB
-        DB::transaction(function () use ($request, $form, $validated) {
+        DB::transaction(function () use ($request, $form) {
             $submission = Submission::create([
                 'form_id' => $form->id,
                 'user_id' => auth()->id(),
@@ -77,17 +76,18 @@ class UserFormController extends Controller
                 foreach ($section->questions as $question) {
                     $jawaban = $request->input("answers.{$question->id}");
 
+                    if (is_null($jawaban) || $jawaban === '') {
+                        continue;
+                    }
+                    
                     if (is_array($jawaban)) { // checkbox
                         $answer = Answer::create([
                             'question_id'   => $question->id,
                             'submission_id' => $submission->id,
                             'answer_text'   => null,
                         ]);
-                        // Simpan ke answer_options table (pivot)
-                        $optionIds = Option::whereIn('option_value', $jawaban)
-                            ->where('question_id', $question->id)
-                            ->pluck('id')->toArray();
-                        $answer->options()->attach($optionIds);
+
+                        $answer->options()->attach($jawaban);
                     } elseif (!is_null($jawaban)) { // text, radio, dropdown
                         Answer::create([
                             'question_id'   => $question->id,

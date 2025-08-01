@@ -126,10 +126,7 @@
                         @php
                             $answer = $submission->answers->where('question_id', $question->id)->first();
 
-                            $selectedOptionIds = [];
-                            if ($answer && $question->type === 'checkbox') {
-                                $selectedOptionIds = $answer->answer_options->pluck('option_id')->all();
-                            }
+                            $selectedOptionIds = $answer?->options?->pluck('id')->all() ?? [];
                         @endphp
 
                         <div class="question-block">
@@ -141,7 +138,11 @@
                                 <div class="answer">
                                     {{ $answer?->answer_text ?? '-' }}
                                 </div>
-                            @elseif ($question->type === 'dropdown' || $question->type === 'radio' || $question->type === 'checkbox')
+                            @elseif ($question->type === 'dropdown')
+                                <div class="answer">
+                                    {{ $answer?->answer_text ?? '-' }}
+                                </div>
+                            @elseif ($question->type === 'radio' || $question->type === 'checkbox')
                                 <div class="answer">
                                     <div class="option-list">
                                         @foreach ($question->options as $opt)
@@ -151,7 +152,7 @@
                                                         {{ in_array($opt->id, $selectedOptionIds) ? 'checked' : '' }}>
                                                 @else
                                                     <input type="radio" disabled
-                                                        {{ $answer && $answer->answer_text == $opt->option_value ? 'checked' : '' }}>
+                                                        {{ $answer && $answer->answer_text == $opt->option_text ? 'checked' : '' }}>
                                                 @endif
                                                 {{ $opt->option_text }}
                                             </label>
