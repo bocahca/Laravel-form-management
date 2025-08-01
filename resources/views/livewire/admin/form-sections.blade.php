@@ -37,17 +37,17 @@
                                     <div class="w-px h-5 bg-primary-dark"></div>
                                 @endif
                                 {{-- Edit Section --}}
-                                <a href="{{ route('admin.forms.sections.edit', [$form, $section]) }}"
+                                <button onclick="Livewire.dispatch('editSection', { sectionId: {{ $section->id }} })"
                                     class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                     </svg>
-                                </a>
+                                </button>
                                 {{-- Delete Section --}}
                                 <button wire:click="deleteSection({{ $section->id }})"
-                                    onclick="if(!confirm('Yakin ingin menghapus section ini?')) return false;"
+                                    wire:confirm="Yakin ingin menghapus section ini?"
                                     class="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -60,14 +60,15 @@
                         <p class="text-neutral-200 mt-1 text-sm">{{ $section->description }}</p>
                     </div>
                     {{-- Tambah Pertanyaan --}}
-                    <a href="{{ route('admin.sections.questions.create', $section) }}"
-                        class="flex-shrink-0 inline-flex items-center px-3 py-2 bg-green-600 text-white text-xs font-bold rounded-md hover:bg-green-700">
+                    <button type="button"
+                        wire:click="$dispatch('openCreateQuestionModal', { sectionId: {{ $section->id }} })"
+                        class="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-semibold rounded-md hover:bg-green-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                             stroke="currentColor" class="w-4 h-4 mr-1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                         Tambah Pertanyaan
-                    </a>
+                    </button>
                 </div>
 
                 {{-- Daftar Pertanyaan --}}
@@ -155,17 +156,18 @@
                                         </button>
                                     @endif
                                     {{-- Tombol Edit Pertanyaan --}}
-                                    <a href="{{ route('admin.sections.questions.edit', [$section, $question]) }}"
+                                    <button
+                                        onclick="Livewire.dispatch('openEditQuestionModal', { questionId: {{ $question->id }} })"
                                         class="p-1.5 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                         </svg>
-                                    </a>
+                                    </button>
                                     {{-- Tombol Hapus Pertanyaan --}}
                                     <button wire:click="deleteQuestion({{ $question->id }})"
-                                        onclick="if(!confirm('Yakin ingin menghapus pertanyaan ini?')) return false;"
+                                        wire:confirm="Yakin ingin menghapus pertanyaan ini?"
                                         class="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -188,4 +190,106 @@
             </div>
         @endforelse
     </div>
+
+    @if ($showSectionModal)
+        {{-- Modal Tambah/Edit Section --}}
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
+            <div class="bg-white rounded-lg w-full max-w-md p-6 z-50 shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">
+                    {{ $isEditSection ? 'Edit Section' : 'Tambah Section' }}
+                </h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Judul Section</label>
+                        <input type="text" wire:model.defer="sectionTitle"
+                            class="w-full border rounded p-2 focus:outline-none focus:ring" />
+                        @error('sectionTitle')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">Deskripsi</label>
+                        <textarea wire:model.defer="sectionDescription" class="w-full border rounded p-2 focus:outline-none focus:ring"></textarea>
+                        @error('sectionDescription')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-6 gap-2">
+                    <button wire:click="$set('showSectionModal', false)"
+                        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Batal</button>
+                    <button wire:click="saveSection"
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90">
+                        Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if ($showQuestionModal)
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white w-full max-w-xl rounded-lg p-6 shadow-xl">
+                <h2 class="text-xl font-bold mb-4">
+                    @if ($isEditQuestion)
+                        Edit Pertanyaan
+                    @else
+                        Tambah Pertanyaan
+                    @endif
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block font-medium text-sm text-gray-700" for="questionText">Pertanyaan</label>
+                        <input type="text" wire:model.defer="questionText" id="questionText"
+                            class="mt-1 block w-full rounded border-gray-300 shadow-sm" />
+                        @error('questionText')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-sm text-gray-700" for="questionType">Tipe
+                            Pertanyaan</label>
+                        <select wire:model.live="questionType" id="questionType"
+                            class="mt-1 block w-full rounded border-gray-300 shadow-sm">
+                            <option value="">-- Pilih Tipe --</option>
+                            <option value="text">Text</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="checkbox">Checkbox</option>
+                            <option value="radio">Radio Button</option>
+                            <option value="dropdown">Dropdown</option>
+                        </select>
+                        @error('questionType')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    @if (in_array($questionType, ['checkbox', 'radio', 'dropdown']))
+                        <div>
+                            <label class="block font-medium text-sm text-gray-700" for="questionOptions">
+                                Pilihan Opsi (pisahkan dengan koma. Contoh: Opsi 1, Opsi 2)
+                            </label>
+                            <textarea wire:model.defer="questionOptions" id="questionOptions" rows="3"
+                                class="mt-1 block w-full rounded border-gray-300 shadow-sm"></textarea>
+                            @error('questionOptions')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex justify-end mt-6 space-x-2">
+                    <button wire:click="$set('showQuestionModal', false)"
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">Batal</button>
+                    <button wire:click="saveQuestion"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">Simpan</button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
 </div>
