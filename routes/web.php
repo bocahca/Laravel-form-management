@@ -3,8 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFormController;
@@ -40,7 +38,6 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('forms', FormController::class);
 
         Route::get('submissions', [SubmissionController::class, 'index'])->name('submissions.index');
-        Route::get('submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
         Route::patch('submissions/{submission}/review', [SubmissionController::class, 'review'])->name('submissions.review');
         Route::get('submissions/{submission}/pdf', [SubmissionController::class, 'generatePdf'])
             ->name('submissions.pdf');
