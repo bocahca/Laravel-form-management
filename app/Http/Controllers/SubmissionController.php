@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class SubmissionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         return view('admin.submissions.index');
     }
