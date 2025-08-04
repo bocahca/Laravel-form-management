@@ -4,6 +4,11 @@
 @section('title', 'Dashboard Admin')
 
 @section('content')
+
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Halo, {{ Auth::user()->name }}!</h1>
+    </div>
+    
     {{-- Statistik --}}
     <div class="grid grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-4 rounded shadow">

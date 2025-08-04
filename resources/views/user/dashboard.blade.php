@@ -4,16 +4,20 @@
 
 @section('content')
     {{-- Statistik submission --}}
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Halo, {{ Auth::user()->name }}!</h1>
+    </div>
+
     <div class="grid grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-4 rounded shadow font-medium">
+        <div class="bg-white p-4 rounded-lg shadow font-medium">
             <div class="text-sm text-gray-500">Pending</div>
             <div class="mt-2 text-3xl font-semibold text-secondary">{{ $pending }}</div>
         </div>
-        <div class="bg-white p-4 rounded shadow font-medium">
+        <div class="bg-white p-4 rounded-lg shadow font-medium">
             <div class="text-sm text-gray-500">Approved</div>
             <div class="mt-2 text-3xl font-semibold text-green-600">{{ $approved }}</div>
         </div>
-        <div class="bg-white p-4 rounded shadow font-medium">
+        <div class="bg-white p-4 rounded-lg shadow font-medium">
             <div class="text-sm text-gray-500">Rejected</div>
             <div class="mt-2 text-3xl font-semibold text-red-600">{{ $rejected }}</div>
         </div>

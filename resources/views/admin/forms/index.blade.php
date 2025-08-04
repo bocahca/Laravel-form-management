@@ -40,7 +40,7 @@
             {{-- Button Buat Baru --}}
             <a href="{{ route('admin.forms.create') }}"
                 class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 whitespace-nowrap md:ml-4">
-                + Buat Form Baru
+                + Buat Formulir
             </a>
         </div>
 

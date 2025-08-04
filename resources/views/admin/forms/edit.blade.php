@@ -7,7 +7,8 @@
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow space-y-6">
         {{-- Tombol Kembali --}}
         <div>
-            <a href="{{ route('admin.forms.show', $form) }}" class="inline-flex items-center text-gray-700 hover:text-gray-900">
+            <a href="{{ route('admin.forms.show', $form) }}"
+                class="inline-flex items-center text-gray-700 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -15,7 +16,7 @@
                 Kembali
             </a>
         </div>
-
+        <h2 class="text-xl font-semibold mb-4">Edit Formulir</h2>
         {{-- Form Edit --}}
         <form action="{{ route('admin.forms.update', $form) }}" method="POST" class="space-y-4">
             @csrf
