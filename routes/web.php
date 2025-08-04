@@ -53,8 +53,8 @@ Route::middleware(['auth', 'role:user'])
             ->name('forms.index');
         Route::get('forms/{form}/fill', [UserFormController::class, 'fill'])->name('forms.fill');
         Route::post('forms/{form}/submit', [UserFormController::class, 'submit'])->name('forms.submit');
-        Route::get('submissions/{submission}', [UserSubmissionController::class, 'show'])
-            ->name('submissions.show');
+        Route::get('submissions', [UserSubmissionController::class, 'index'])
+            ->name('submissions.index');
         Route::get('submissions/{submission}/pdf', [SubmissionController::class, 'generatePdf'])
             ->name('submissions.pdf');
     });
