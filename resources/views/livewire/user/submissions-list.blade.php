@@ -4,7 +4,7 @@
     {{-- Filter/Search --}}
     <div class="mb-4 flex flex-wrap gap-2 pb-6">
         <select wire:model.live="status" class="border rounded px-5">
-            <option value="">All Status</option>
+            <option value="">Status</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
