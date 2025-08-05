@@ -57,6 +57,10 @@ class UserFormController extends Controller
                 $field = "answers.{$question->id}";
                 if ($question->type === 'checkbox') {
                     $rules[$field] = 'nullable|array';
+                } else if ($question->type === 'textarea') {
+                    $rules[$field] = 'nullable|string|max:2000';
+                } else if ($question->type === 'text') {
+                    $rules[$field] = 'nullable|string|max:255';
                 } else {
                     $rules[$field] = 'nullable|string';
                 }
@@ -64,7 +68,7 @@ class UserFormController extends Controller
         }
         $request->validate($rules);
 
-        // Simpan submission & jawaban ke DB
+        // Simpan submission & jawaban
         DB::transaction(function () use ($request, $form) {
             $submission = Submission::create([
                 'form_id' => $form->id,
@@ -79,7 +83,7 @@ class UserFormController extends Controller
                     if (is_null($jawaban) || $jawaban === '') {
                         continue;
                     }
-                    
+
                     if (is_array($jawaban)) { // checkbox
                         $answer = Answer::create([
                             'question_id'   => $question->id,
