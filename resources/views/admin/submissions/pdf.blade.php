@@ -45,6 +45,7 @@
             border: 1px solid #e5e7eb;
             border-radius: 6px;
             overflow: hidden;
+            page-break-inside: avoid;
         }
 
         .section-header {
@@ -81,17 +82,23 @@
             border-radius: 6px;
         }
 
-        .option-list {}
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
         .option-list label {
-            display: inline-block;
-            padding: 5px 0;
+            display: inline-flex;
+            align-items: flex-start;
+            min-width: 180px;
+            margin: 0;
+            padding: 2px 0;
         }
 
         .option-list input {
-            vertical-align: middle;
-            margin-right: 4px;
-            margin-left: 4px;
+            margin: 3px 8px 0 0;
+            flex-shrink: 0;
         }
 
         .meta-info {
@@ -99,14 +106,34 @@
             color: #6b7280;
             margin-top: 4px;
         }
+
+        /* Group separator for options */
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .option-group:first-child {
+            margin-top: 0;
+        }
+
+        .option-list input[type="checkbox"],
+        .option-list input[type="radio"] {
+            width: 12px;
+            height: 12px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="page-container" style="position: relative;">
+    <div class="page-container">
         @if (!empty($stampPath))
             <img src="{{ $stampPath }}" alt="Approved Stamp" class="stamp-image">
         @endif
+
         {{-- HEADER FORM --}}
         <h1>{{ $form->title }}</h1>
         <p>{{ $form->description }}</p>
@@ -125,7 +152,6 @@
                     @foreach ($section->questions()->orderBy('position')->get() as $question)
                         @php
                             $answer = $submission->answers->where('question_id', $question->id)->first();
-
                             $selectedOptionIds = $answer?->options?->pluck('id')->all() ?? [];
                         @endphp
 
@@ -145,17 +171,47 @@
                             @elseif ($question->type === 'radio' || $question->type === 'checkbox')
                                 <div class="answer">
                                     <div class="option-list">
-                                        @foreach ($question->options as $opt)
-                                            <label>
-                                                @if ($question->type === 'checkbox')
-                                                    <input type="checkbox" disabled
-                                                        {{ in_array($opt->id, $selectedOptionIds) ? 'checked' : '' }}>
-                                                @else
-                                                    <input type="radio" disabled
-                                                        {{ $answer && $answer->answer_text == $opt->option_text ? 'checked' : '' }}>
-                                                @endif
-                                                {{ $opt->option_text }}
-                                            </label>
+                                        @php
+                                            $currentGroup = [];
+                                            $groups = [];
+                                        @endphp
+
+                                        @foreach ($question->options as $index => $opt)
+                                            @php
+                                                // Check if option contains semicolon to start new group
+                                                $isNewGroup = str_contains($opt->option_text, ';');
+
+                                                if ($isNewGroup || count($currentGroup) === 3) {
+                                                    if (!empty($currentGroup)) {
+                                                        $groups[] = $currentGroup;
+                                                    }
+                                                    $currentGroup = [];
+                                                }
+
+                                                $currentGroup[] = $opt;
+
+                                                // Add last group
+                                                if ($loop->last && !empty($currentGroup)) {
+                                                    $groups[] = $currentGroup;
+                                                }
+                                            @endphp
+                                        @endforeach
+
+                                        @foreach ($groups as $group)
+                                            <div class="option-group">
+                                                @foreach ($group as $opt)
+                                                    <label>
+                                                        @if ($question->type === 'checkbox')
+                                                            <input type="checkbox" disabled
+                                                                {{ in_array($opt->id, $selectedOptionIds) ? 'checked' : '' }}>
+                                                        @else
+                                                            <input type="radio" disabled
+                                                                {{ $answer && $answer->answer_text == $opt->option_text ? 'checked' : '' }}>
+                                                        @endif
+                                                        {{ str_replace(';', '', $opt->option_text) }}
+                                                    </label>
+                                                @endforeach
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
