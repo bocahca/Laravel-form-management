@@ -162,7 +162,7 @@ class FormSections extends Component
                 if (in_array($this->questionType, ['checkbox', 'radio', 'dropdown'])) {
                     $options = array_map('trim', explode(',', $this->questionOptions));
                     foreach ($options as $opt) {
-                        $question->options()->create(['option_text' => $opt]);
+                        $question->options()->create(['option_text' => $opt, 'option_value' => $opt]);
                     }
                 }
             } else {
@@ -179,7 +179,7 @@ class FormSections extends Component
                 if (in_array($this->questionType, ['checkbox', 'radio', 'dropdown'])) {
                     $options = array_map('trim', explode(',', $this->questionOptions));
                     foreach ($options as $opt) {
-                        $question->options()->create(['option_text' => $opt]);
+                        $question->options()->create(['option_text' => $opt, 'option_value' => $opt]);
                     }
                 }
             }
