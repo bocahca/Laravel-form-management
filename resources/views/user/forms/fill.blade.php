@@ -82,9 +82,10 @@
                                                                 @endforeach
                                                             </select>
                                                         @elseif ($question->type === 'radio')
-                                                            <div class="flex items-center gap-x-6">
+                                                            <div class="flex flex-wrap gap-4">
                                                                 @foreach ($question->options ?? [] as $opt)
-                                                                    <label class="inline-flex items-center text-gray-700">
+                                                                    <label
+                                                                        class="inline-flex items-center text-gray-700 min-w-[180px]">
                                                                         <input type="radio"
                                                                             name="answers[{{ $question->id }}]"
                                                                             value="{{ $opt->option_text }}"
@@ -94,9 +95,10 @@
                                                                 @endforeach
                                                             </div>
                                                         @elseif($question->type === 'checkbox')
-                                                            <div class="flex items-center gap-x-6">
+                                                            <div class="flex flex-wrap gap-4">
                                                                 @foreach ($question->options ?? [] as $opt)
-                                                                    <label class="inline-flex items-center text-gray-700">
+                                                                    <label
+                                                                        class="inline-flex items-center text-gray-700 min-w-[180px]">
                                                                         <input type="checkbox"
                                                                             name="answers[{{ $question->id }}][]"
                                                                             value="{{ $opt->id }}"
