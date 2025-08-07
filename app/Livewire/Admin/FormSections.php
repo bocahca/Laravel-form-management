@@ -151,19 +151,35 @@ class FormSections extends Component
 
         DB::transaction(function () {
             if ($this->isEditQuestion && $this->editingQuestionId) {
-                // --- UPDATE QUESTION ---
                 $question = Question::findOrFail($this->editingQuestionId);
+
+                // Update question
                 $question->update([
                     'question_text' => $this->questionText,
                     'type' => $this->questionType,
                 ]);
 
-                $question->options()->delete();
                 if (in_array($this->questionType, ['checkbox', 'radio', 'dropdown'])) {
-                    $options = array_map('trim', explode(',', $this->questionOptions));
-                    foreach ($options as $opt) {
-                        $question->options()->create(['option_text' => $opt, 'option_value' => $opt]);
+                    $newOptionTexts = array_map('trim', explode(',', $this->questionOptions));
+
+                    $existingOptions = $question->options()->get();
+
+                    foreach ($newOptionTexts as $optionText) {
+                        $existingOption = $existingOptions->firstWhere('option_text', $optionText);
+
+                        if (!$existingOption) {
+                            $question->options()->create([
+                                'option_text' => $optionText,
+                                'option_value' => $optionText
+                            ]);
+                        }
                     }
+
+                    $question->options()
+                        ->whereNotIn('option_text', $newOptionTexts)
+                        ->delete();
+                } else {
+                    $question->options()->delete();
                 }
             } else {
                 // --- CREATE QUESTION ---
