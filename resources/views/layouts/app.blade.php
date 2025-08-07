@@ -12,6 +12,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
     {{-- Masukkan CSS/JS via Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -49,21 +54,21 @@
             <!-- Topbar -->
             <header class="bg-white shadow flex items-center justify-between px-6 py-4">
                 <div class="flex items-center space-x-4">
-                <button @click="toggleManual()" class="p-2 rounded hover:bg-gray-100">
-                    <svg :class="sidebarOpen ? 'rotate-180' : ''"
-                        class="w-6 h-6 text-gray-600 transition-transform duration-300" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <h2 class="text-xl font-semibold text-[#1F4E79]">
-                    @hasSection('pageHeading')
-                        @yield('pageHeading')
-                    @else
-                        {{ auth()->user()->role === 'admin' ? 'Dashboard Admin' : 'Dashboard' }}
-                    @endif
-                </h2>
+                    <button @click="toggleManual()" class="p-2 rounded hover:bg-gray-100">
+                        <svg :class="sidebarOpen ? 'rotate-180' : ''"
+                            class="w-6 h-6 text-gray-600 transition-transform duration-300" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h2 class="text-xl font-semibold text-[#1F4E79]">
+                        @hasSection('pageHeading')
+                            @yield('pageHeading')
+                        @else
+                            {{ auth()->user()->role === 'admin' ? 'Dashboard Admin' : 'Dashboard' }}
+                        @endif
+                    </h2>
                 </div>
                 @include('layouts.navigation')
             </header>

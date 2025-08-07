@@ -30,8 +30,8 @@
                 </div>
 
                 {{-- FORM FILL --}}
-                <form action="{{ route('user.forms.submit', $form) }}" method="POST"
-                    class="mt-8 pt-8 border-t border-gray-400">
+                <form action="{{ route('user.forms.submit', $form) }}" @submit.prevent method="POST"
+                    x-data="{ showConfirm: false }" class="mt-8 pt-8 border-t border-gray-400">
                     @csrf
                     <div class="space-y-6">
                         @foreach ($form->sections as $section)
@@ -118,9 +118,25 @@
                         @endforeach
                     </div>
                     <div class="flex justify-end mt-8">
-                        <button type="submit" class="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90">
+                        <button type="button" @click="showConfirm = true"
+                            class="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90">
                             Kirim Jawaban
                         </button>
+                    </div>
+
+                    <div x-show="showConfirm" x-cloak x-transition
+                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Pengiriman</h2>
+                            <p class="text-sm text-gray-600 mb-6">Apakah Anda yakin semua jawaban sudah diisi dengan benar?
+                                Setelah dikirim, Anda tidak bisa mengubahnya.</p>
+                            <div class="flex justify-end gap-4">
+                                <button @click="showConfirm = false"
+                                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Batal</button>
+                                <button type="submit" @click="showConfirm = false; $event.target.closest('form').submit();"
+                                    class="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">Kirim</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
