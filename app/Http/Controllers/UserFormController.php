@@ -6,7 +6,9 @@ use App\Models\Answer;
 use App\Models\Form;
 use App\Models\Option;
 use App\Models\Submission;
+use App\Notifications\SubmissionCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
 
 class UserFormController extends Controller
@@ -50,16 +52,15 @@ class UserFormController extends Controller
 
     public function submit(Request $request, Form $form)
     {
-        // Validasi dinamis sesuai tipe pertanyaan
         $rules = [];
         foreach ($form->sections as $section) {
             foreach ($section->questions as $question) {
                 $field = "answers.{$question->id}";
                 if ($question->type === 'checkbox') {
                     $rules[$field] = 'nullable|array';
-                } else if ($question->type === 'textarea') {
+                } elseif ($question->type === 'textarea') {
                     $rules[$field] = 'nullable|string|max:2000';
-                } else if ($question->type === 'text') {
+                } elseif ($question->type === 'text') {
                     $rules[$field] = 'nullable|string|max:255';
                 } else {
                     $rules[$field] = 'nullable|string';
@@ -69,7 +70,7 @@ class UserFormController extends Controller
         $request->validate($rules);
 
         // Simpan submission & jawaban
-        DB::transaction(function () use ($request, $form) {
+        $submission = DB::transaction(function () use ($request, $form) {
             $submission = Submission::create([
                 'form_id' => $form->id,
                 'user_id' => auth()->id(),
@@ -92,7 +93,7 @@ class UserFormController extends Controller
                         ]);
 
                         $answer->options()->attach($jawaban);
-                    } elseif (!is_null($jawaban)) { // text, radio, dropdown
+                    } else { // text, radio, dropdown
                         Answer::create([
                             'question_id'   => $question->id,
                             'submission_id' => $submission->id,
@@ -101,7 +102,11 @@ class UserFormController extends Controller
                     }
                 }
             }
+            return $submission;
         });
+
+        Notification::route('telegram', config('services.telegram-bot-api.chat_id'))
+            ->notify(new SubmissionCreated($submission));
 
         return redirect()->route('user.forms.index')->with('success', 'Formulir berhasil disubmit!');
     }
