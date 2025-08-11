@@ -33,7 +33,7 @@ class SubmissionCreated extends Notification
                     . "📝 Form: *{$form->title}*\n"
                     . "👤 User: *{$user->name}*\n"
                     . "📧 Email: {$user->email}\n"
-                    . "📅 Tanggal: " . now()->format('d M Y H:i')
+                    . "📅 Tanggal: " . now()->format('d M Y')
             );
     }
 }
