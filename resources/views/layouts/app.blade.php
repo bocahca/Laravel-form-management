@@ -17,7 +17,6 @@
             display: none !important;
         }
     </style>
-    {{-- Masukkan CSS/JS via Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
