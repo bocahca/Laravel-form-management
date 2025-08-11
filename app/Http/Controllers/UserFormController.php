@@ -26,7 +26,7 @@ class UserFormController extends Controller
             ->orderByDesc('created_at')
             ->paginate(10)
             ->appends(['q' => $q]);
-        $pendingFormIds = \App\Models\Submission::where('user_id', auth()->id())
+        $pendingFormIds = Submission::where('user_id', auth()->id())
             ->where('status', 'pending')
             ->pluck('form_id')
             ->toArray();
@@ -36,16 +36,6 @@ class UserFormController extends Controller
 
     public function fill(Form $form)
     {
-        $pending = Submission::where('form_id', $form->id)
-            ->where('user_id', auth()->id())
-            ->where('status', 'pending')
-            ->first();
-
-        if ($pending) {
-            return redirect()->route('user.forms.index')
-                ->with('error', 'Anda masih memiliki pengisian form ini yang belum selesai (pending).');
-        }
-
         $form->load(['sections.questions.options']);
         return view('user.forms.fill', compact('form'));
     }

@@ -58,22 +58,10 @@
                         {{-- Kanan: tombol isi --}}
                         <div class="mt-4 md:mt-0 flex items-center gap-4">
                             <div class="mt-4 md:mt-0 flex items-center gap-4">
-                                @if (in_array($form->id, $pendingFormIds))
-                                    <span class="tooltip-disabled-btn">
-                                        <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded cursor-not-allowed"
-                                            disabled>
-                                            Isi Form
-                                        </button>
-                                        <span class="tooltip-text">
-                                            Masih ada submission pending untuk form ini.
-                                        </span>
-                                    </span>
-                                @else
-                                    <a href="{{ route('user.forms.fill', $form) }}"
-                                        class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 font-medium">
-                                        Isi Form
-                                    </a>
-                                @endif
+                                <a href="{{ route('user.forms.fill', $form) }}"
+                                    class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 font-medium">
+                                    Isi Form
+                                </a>
                             </div>
 
                         </div>
