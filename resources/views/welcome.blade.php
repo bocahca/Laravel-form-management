@@ -9,7 +9,6 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-
     {{-- Container Utama --}}
     <div class="w-full max-w-5xl mx-auto">
         <div class="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
@@ -46,6 +45,12 @@
             <div class="w-full md:w-2/5 bg-gray-50 md:border-l">
                 <div class="h-full flex flex-col justify-center p-8 md:p-12">
                     <div class="w-full max-w-sm mx-auto">
+                        @if (session('status'))
+                            <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+                                role="alert">
+                                <p>{{ session('status') }}</p>
+                            </div>
+                        @endif
                         @auth
                             {{-- Tampilan untuk user yang sudah login --}}
                             <div class="text-center">
