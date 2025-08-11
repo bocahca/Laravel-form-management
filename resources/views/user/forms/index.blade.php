@@ -7,6 +7,12 @@
         <div class="mb-6">
             <h1 class="text-2xl font-semibold text-gray-800">Daftar Formulir</h1>
         </div>
+        {{-- flash message --}}
+        @if (session('success'))
+            <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md" role="alert">
+                <p class="font-bold">{{ session('success') }}</p>
+            </div>
+        @endif
 
         <form action="{{ route('user.forms.index') }}" method="GET" class="flex items-center space-x-2 mb-8">
             <div class="flex items-center border border-gray-300 rounded overflow-hidden">
