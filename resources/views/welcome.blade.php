@@ -16,10 +16,10 @@
             <div class="w-full md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
                 <div class="max-w-md mx-auto">
                     <h2 class="font-heading text-4xl font-bold text-gray-900">
-                        Web Title
+                        Sistem Informasi Manajemen Formulir
                     </h2>
                     <p class="mt-4 text-xl text-gray-600">
-                        Aliqet consectetur id magna ac integer. Aliqet consectetur id magna
+                        
                     </p>
 
                     <div class="mt-8 bg-white p-6 rounded-lg shadow-md border border-gray-100">
