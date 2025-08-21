@@ -27,7 +27,7 @@ class SubmissionsList extends Component
             })
             ->when($this->search, function ($query) {
                 return $query->whereHas('form', function ($q) {
-                    $q->where('title', 'like', '%' . $this->search . '%');
+                    $q->where('title', 'ILIKE', '%' . $this->search . '%');
                 });
             })
             ->orderByDesc('created_at')
