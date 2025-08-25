@@ -13,10 +13,7 @@ class SubmissionReviewModal extends Component
     public ?Submission $submission = null;
     public string $review_note = '';
 
-    /**
-     * Listener untuk event 'openReviewModal'.
-     * Mengambil data submission dan menampilkan modal.
-     */
+
     #[On('openReviewModal')]
     public function openModal($submissionId): void
     {
@@ -29,37 +26,29 @@ class SubmissionReviewModal extends Component
         $this->showModal = true;
     }
 
-    /**
-     * Memproses review (Approve/Reject), mengupdate database,
-     * dan memberitahu komponen lain bahwa proses selesai.
-     */
     public function processReview(string $newStatus): void
     {
-        // Validasi sederhana
         if (!in_array($newStatus, ['approved', 'rejected']) || !$this->submission) {
             return;
         }
 
-        // Update data di database
         $this->submission->update([
             'status' => $newStatus,
             'review_note' => $this->review_note,
-            'reviewed_by' => Auth::id(),
-            // Penting: Hanya isi 'approved_at' jika statusnya 'approved'
+            'reviewed_by' => Auth::id(),  
             'approved_at' => $newStatus === 'approved' ? now() : null,
         ]);
 
         // Tutup modal
         $this->showModal = false;
 
-        // 💡 KUNCI UTAMA: Pancarkan event untuk memberitahu komponen daftar agar refresh
         $this->dispatch('submissionUpdated');
 
-        // Reset state internal modal untuk persiapan pembukaan berikutnya
         $this->reset('submission', 'review_note');
+        $this->dispatch('submissionStatusChanged');
     }
 
-    public function render()
+     public function render()
     {
         return view('livewire.admin.submission-review-modal');
     }
