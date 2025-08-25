@@ -8,7 +8,7 @@
     <div class="mb-6">
         <h1 class="text-2xl font-semibold text-gray-800">Halo, {{ Auth::user()->name }}!</h1>
     </div>
-    
+
     {{-- Statistik --}}
     <div class="grid grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-4 rounded shadow">
@@ -25,10 +25,8 @@
         </div>
     </div>
 
-    {{-- TODO: Daftar Form (statis dulu, besok kita dinamis tambahkan pagination) --}}
-    <div class="bg-white rounded shadow p-6">
-        <h2 class="text-lg font-medium text-gray-700 mb-4">Daftar Form</h2>
-        {{-- nanti loop $forms --}}
-        <p class="text-gray-500">Belum ada form untuk ditampilkan.</p>
-    </div>
+    {{-- Pending Submissions --}}
+    <livewire:admin.pending-submissions />
+    <livewire:admin.submission-review-modal />
+
 @endsection
